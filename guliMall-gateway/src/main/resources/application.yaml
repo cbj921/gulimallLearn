@@ -6,6 +6,24 @@ spring:
       config:
         server-addr: 127.0.0.1:8848
         namespace: 8b43fdd6-ad39-4a2e-99ca-d080ddf2408f
+    gateway:
+      routes:
+        - id: product_route
+          uri: lb://gulimall-product
+          predicates:
+            - Path=/api/product/**
+          filters:
+            - RewritePath=/api/?(?<segment>.*), /$\{segment}
+
+        - id: admin_route
+          uri: lb://renren-fast
+          predicates:
+            - Path=/api/**
+          filters:
+            - RewritePath=/api/?(?<segment>.*), /renren-fast/$\{segment}
+
+
+
   application:
     name: gulimall-gateway
   config:
